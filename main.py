@@ -6,11 +6,16 @@ DATABASE = 'Orks.db'
 def menu():
     print("welcome to the 40k ork unit database.")
     print("please select an option:")
+    print("0: exit the program")
     print("1: search for a unit by it's name.")
     user_input = input("")
 
-    if user_input == '1':
+    if user_input == "0":
+        exit()
+    elif user_input == '1':
         searchunitname()
+    else:
+        print("Please enter a valid input")
 
 
 def searchunitname():
@@ -35,6 +40,8 @@ def searchunitname():
                 while True:
                     try:
                         user_input = input("")
+                        if user_input == "exit":
+                            menu()
                         new_input = int(user_input)
                         break
                     except ValueError:
@@ -46,6 +53,18 @@ def searchunitname():
                 sql = f"SELECT * FROM unit WHERE name = '{search}'"
                 cursor.execute(sql)
                 results = cursor.fetchall()
+                results = results[0]
+                print("Unit ID:", results[0])
+                print("Movement:", results[2])
+                print("Toughness:", results[3])
+                print("Save:", results[4])
+                print("Wounds:", results[5])
+                print("Leadership:", results[6])
+                print("Objective Control:", results[7])
+                print("")
+
+                menu()
+
                 
 
     if search == "exit":
