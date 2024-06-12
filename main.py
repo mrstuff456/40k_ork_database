@@ -4,6 +4,10 @@ DATABASE = 'Orks.db'
 
 
 def menu():
+    '''
+    This function is the menu that the user will be presented with that allows them to interact with the program
+    and run the variuos functions that the program has.
+    '''
     print("welcome to the 40k ork unit database.")
     print("please select an option:")
     print("0: exit the program")
@@ -16,9 +20,14 @@ def menu():
         searchunitname()
     else:
         print("Please enter a valid input")
+        menu()
 
 
 def searchunitname():
+    '''
+    This function will allow the user to enter a search term and produce a list of units which name match the search
+    the user will then be able to enter a number that corresponds to a unit and will produce the full stats for that unit
+    '''
     search = input("Please enter your search term or type 'exit' to cancel: ")
     if search != "exit":
         with sqlite3.connect(DATABASE) as db:
@@ -49,7 +58,7 @@ def searchunitname():
 
                 search = results[new_input - 1][0]
                 print("")
-                print(search)
+                print("unit stats for", search)
                 sql = f"SELECT * FROM unit WHERE name = '{search}'"
                 cursor.execute(sql)
                 results = cursor.fetchall()
@@ -63,7 +72,13 @@ def searchunitname():
                 print("Objective Control:", results[7])
                 print("")
 
-                menu()
+                print("press enter to go back to menu, or type 'exit' to exit the program")
+                user_input = input("")
+
+                if user_input == "exit":
+                    exit()
+                else:
+                    menu()
 
                 
 
