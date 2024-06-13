@@ -25,7 +25,6 @@ def menu():
         print("Please enter a valid input")
         menu()
 
-
 def searchunitname():
     '''
     This function will allow the user to enter a search term and produce a list of units which name match the search
@@ -89,6 +88,9 @@ def searchunitname():
         menu()
 
 def printall():
+    '''
+    This function will print out everything inside of the database and format/print the data in a nice way.
+    '''
     with sqlite3.connect(DATABASE) as db:
         cursor = db.cursor()
         sql = "SELECT * FROM unit;"
@@ -100,6 +102,8 @@ def printall():
             print(f"| {result[0]:<3}| {result[1]:<40}| {result[2]:<3}| {result[3]:<3}| {result[4]:<3}| {result[5]:<3}| {result[6]:<3}| {result[7]:<3}|")
         user_input = input("Press enter to go back to menu:")
         menu()
+
+
 
 
 
