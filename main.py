@@ -12,12 +12,15 @@ def menu():
     print("please select an option:")
     print("0: exit the program")
     print("1: search for a unit by it's name.")
+    print("2: Print out all data in the database")
     user_input = input("")
 
     if user_input == "0":
         exit()
     elif user_input == '1':
         searchunitname()
+    elif user_input == '2':
+        printall()
     else:
         print("Please enter a valid input")
         menu()
@@ -84,6 +87,20 @@ def searchunitname():
 
     if search == "exit":
         menu()
+
+def printall():
+    with sqlite3.connect(DATABASE) as db:
+        cursor = db.cursor()
+        sql = "SELECT * FROM unit;"
+        cursor.execute(sql)
+        results = cursor.fetchall()
+        print("| ID | Name                                    | M  | T  | SV | W  | LD | OC |")
+        print("------------------------------------------------------------------------------")
+        for result in results:
+            print(f"| {result[0]:<3}| {result[1]:<40}| {result[2]:<3}| {result[3]:<3}| {result[4]:<3}| {result[5]:<3}| {result[6]:<3}| {result[7]:<3}|")
+        user_input = input("Press enter to go back to menu:")
+        menu()
+
 
 
 menu()
