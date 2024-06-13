@@ -10,9 +10,10 @@ def menu():
     '''
     print("welcome to the 40k ork unit database.")
     print("please select an option:")
-    print("0: exit the program")
+    print("0: exit the program.")
     print("1: search for a unit by it's name.")
-    print("2: Print out all data in the database")
+    print("2: Print out all data in the database.")
+    print("3: print all data in the database sorted by a certain stat.")
     user_input = input("")
 
     if user_input == "0":
@@ -21,6 +22,8 @@ def menu():
         searchunitname()
     elif user_input == '2':
         printall()
+    elif user_input == '3':
+        printallsorted()
     else:
         print("Please enter a valid input")
         menu()
@@ -100,11 +103,68 @@ def printall():
         print("------------------------------------------------------------------------------")
         for result in results:
             print(f"| {result[0]:<3}| {result[1]:<40}| {result[2]:<3}| {result[3]:<3}| {result[4]:<3}| {result[5]:<3}| {result[6]:<3}| {result[7]:<3}|")
-        user_input = input("Press enter to go back to menu:")
+        user_input = input("Press enter to go back to menu, or type 'exit' to exit the program:")
+        if user_input == 'exit':
+            exit()
         menu()
 
+def printallsorted():
+    '''
+    This function will promt the user with a choice of stat and ascending and descending category, the program will then
+    print all data in the database in the format of that sorted stat
+    '''
+    with sqlite3.connect(DATABASE) as db:
+        user_input = input("what stat do you want the data to be sorted by? (Name, M, T, S, W, LD, OC)")
+        while True:
+            if user_input == 'Name':
+                stat = 'name'
+                break
+            elif user_input == 'M':
+                stat = 'movement'
+                break
+            elif user_input == 'T':
+                stat = 'toughness'
+                break
+            elif user_input == 'S':
+                stat = 'save'
+                break
+            elif user_input == 'W':
+                stat = 'wounds'
+                break
+            elif user_input == 'LD':
+                stat = 'leadership'
+                break
+            elif user_input == 'OC':
+                stat = 'objective control'
+                break
+            else:
+                print("Please enter a valid input (Name, M, T, S, W, LD, OC)")
+                user_input = input("")
 
+        user_input = input("Do you want it to be sorted ascending (lowest to highest) or desending? (highest to lowest) (A/D).")
+        while True:
+            if user_input == 'A':
+                order = 'ASC'
+                break
+            elif user_input == 'D':
+                order = 'DESC'
+                break
+            else:
+                print("Please enter a valid input. (A/D)")
 
+        cursor = db.cursor()
+        sql = f"SELECT * FROM unit ORDER BY {stat} {order};"
+        cursor.execute(sql)
+        results = cursor.fetchall()
+        print("| ID | Name                                    | M  | T  | SV | W  | LD | OC |")
+        print("------------------------------------------------------------------------------")
+        for result in results:
+            print(f"| {result[0]:<3}| {result[1]:<40}| {result[2]:<3}| {result[3]:<3}| {result[4]:<3}| {result[5]:<3}| {result[6]:<3}| {result[7]:<3}|")
+        user_input = input("Press enter to go back to menu, or type 'exit' to exit the program:")
 
+        if user_input == "exit":
+            exit()
+        else:
+            menu()
 
 menu()
